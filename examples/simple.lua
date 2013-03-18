@@ -1,11 +1,14 @@
 -- add this into your init_by_lua
 
+-- not sure we gain anything by abstracting away the nginx object
+-- maybe enforcing best practices?? or just convienience?
+
 local ziggy = require "ziggy"
 local cjson = require "cjson"
 
 local _M = {}
 
-local function html(ngx, stuff)
+local function html(stuff)
     return {
 	status = 200,
 	headers = {
@@ -16,7 +19,7 @@ local function html(ngx, stuff)
 end
 
 local encode = cjson.encode
-local function json(ngx, data)
+local function json(data)
     return {
 	status = 200,
 	headers = {
@@ -29,15 +32,15 @@ end
 local app = ziggy.new()
 
 app:get("%.html?$", 
-	function(ngx)
-	    return html("<html>You came looking for " .. ngx.var.uri .. "</html>")
+	function(req)
+	    return html("<html>You came looking for " .. req.path .. "</html>")
 	end
        )
 
 local options = { foo = "bar")
 
 app:get("^/options", 
-	function(ngx)
+	function(req)
 	    return json(options)
 	end
        )
