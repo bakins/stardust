@@ -1,0 +1,1 @@
+Ziggy played guitar.
