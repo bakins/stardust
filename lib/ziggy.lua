@@ -5,6 +5,8 @@ local insert = table.insert
 local find = string.find
 local len = string.len
 
+local request = require "ziggy.request"
+
 local _M = {}
 
 function _M.new()
@@ -37,6 +39,7 @@ for _,m in ipairs({ "get", "post", "put", "delete"}) do
 end
 
 -- lifted from, LSD, ouzo, etc
+-- could maybe use a function or table for body???
 local function send_response(ngx, response)
     local headers = response.headers or {}
     local status = tonumber(response.status) or 500
@@ -64,6 +67,8 @@ local function send_response(ngx, response)
     end
 end
 
+local request_new = request.new
+
 function _M.run(self, ngx)
     local method = ngx.req.get_method
     local routes = self.routes[method]
@@ -73,7 +78,7 @@ function _M.run(self, ngx)
     for _,item in ipairs(routes) do
 	if find(ngx.var.uri, item.pattern) then
 	    -- we may want to provide a "wrapped" version of the request??
-	    return send_response(ngx, item.func(ngx))
+	    return send_response(ngx, item.func(request_new(ngx)))
 	end
     end
 end
