@@ -17,13 +17,18 @@ local simple_indexes = {
     host = host
 }
 
-local index_funcs = {
-    header = function(ngx) return ngx.var["http_" . .gsub(lower(key), "-", "_")] end
-}
+function _M.register_index(key, func)
+    index_func[key] = func
+end
+
+local register_index = _M.register_index
+
+register_index("header", function(ngx) return ngx.var["http_" . .gsub(lower(key), "-", "_")] end)
 
 for k,v in pairs(simple_indexes) do
-    index_funcs[k] = function(ngx) return ngx.var[k] end
+    register_index(k, function(ngx) return ngx.var[k] end)
 end
+
 
 local function index_function(t, k)
     local ngx = rawget(t, "ngx")
