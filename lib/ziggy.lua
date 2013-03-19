@@ -18,7 +18,7 @@ function _M.new()
 	    DELETE = {}
 	}
     }
-    return setmetatable(self, { __index = _M }
+    return setmetatable(self, { __index = _M })
 end
 
 function _M.route(self, method, pattern, func)
@@ -34,8 +34,8 @@ end
 
 local route = _M.route
 for _,m in ipairs({ "get", "post", "put", "delete"}) do
-    m = string.upper(m)
-    function _M[m] = function(self, pattern, func) return route(self, m, pattern, func) end
+    local method = string.upper(m)
+    _M[m] = function(self, pattern, func) return route(self, method, pattern, func) end
 end
 
 -- lifted from, LSD, ouzo, etc
@@ -70,7 +70,7 @@ end
 local request_new = request.new
 
 function _M.run(self, ngx)
-    local method = ngx.req.get_method
+    local method = ngx.req.get_method()
     local routes = self.routes[method]
     if not routes then
 	return nil, "unhandled method: " .. method
