@@ -16,6 +16,9 @@ local response = require "ziggy.response"
 local _M = {}
 
 local function dummy_last_middleware(req, res, nxt)
+    -- http://wiki.nginx.org/HttpLuaModule#ngx.req.discard_body
+    -- if noone else read it, just throw it away
+    ngx.req.discard_body()
 end
 
 --- Create a new ziggy application.
