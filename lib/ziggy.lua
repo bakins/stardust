@@ -1,3 +1,8 @@
+--- Ziggy
+-- @module ziggy
+-- @alias _M
+
+
 -- Random thoughts
 -- maybe have different types of matches? exact, location/trie, regex, pattern
 
@@ -10,6 +15,8 @@ local response = require "ziggy.response"
 
 local _M = {}
 
+--- Create a new ziggy application.
+-- @return a ziggy application
 function _M.new()
     local self = {
 	routes = { 
@@ -22,6 +29,14 @@ function _M.new()
     return setmetatable(self, { __index = _M })
 end
 
+--- Add a route
+-- @param self ziggy application
+-- @param method HTTP method, ie GET, POST
+-- @param pattern uri pattern to match
+-- @param func function to call when this pattern is matched. fucntion should take 2 arguments: a request object and a response object
+-- @usage app = ziggy.new()
+--app:route('GET', '/foo', function(req, res) res.body = "hello" end)
+
 function _M.route(self, method, pattern, func)
     local t = self.routes[method]
     if not t then
@@ -33,10 +48,42 @@ function _M.route(self, method, pattern, func)
     return true, nil
 end
 
-local route = _M.route
-for _,m in ipairs({ "get", "post", "put", "delete"}) do
-    local method = string.upper(m)
-    _M[m] = function(self, pattern, func) return route(self, method, pattern, func) end
+-- be explicit for documentation...
+
+--- Convenience function to add a route for GET
+-- @param self ziggy application
+-- @param pattern uri pattern to match
+-- @param func function
+-- @see route
+function _M.get(self, pattern, func) 
+    return route(self, "GET", pattern, func) 
+end
+
+--- Convenience function to add a route for POST
+-- @param self ziggy application
+-- @param pattern uri pattern to match
+-- @param func function
+-- @see route
+function _M.post(self, pattern, func) 
+    return route(self, "POST", pattern, func) 
+end
+
+--- Convenience function to add a route for PUT
+-- @param self ziggy application
+-- @param pattern uri pattern to match
+-- @param func function
+-- @see route
+function _M.put(self, pattern, func) 
+    return route(self, "PUT", pattern, func) 
+end
+
+--- Convenience function to add a route for DELETE
+-- @param self ziggy application
+-- @param pattern uri pattern to match
+-- @param func function
+-- @see route
+function _M.delete(self, pattern, func) 
+    return route(self, "DELETE", pattern, func) 
 end
 
 -- lifted from, LSD, ouzo, etc
@@ -71,6 +118,11 @@ end
 local request_new = request.new
 local response_new = response.new
 
+--- Runt the application
+-- @param self ziggy application
+-- @param ngx magix nginx Lua object
+-- @usage Add something like this to nginx.conf:
+--content_by_lua 'return require("my.ziggy.module").run(ngx)';
 function _M.run(self, ngx)
     local method = ngx.req.get_method()
     local routes = self.routes[method]

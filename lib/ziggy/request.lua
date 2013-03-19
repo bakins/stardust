@@ -1,3 +1,8 @@
+--- Ziggy Request
+-- @module ziggy.request
+-- @alias _M
+
+
 -- wraps an nginx request
 -- copy something like http://expressjs.com/api.html#req.params ?
 -- or something "rack-like"
@@ -58,6 +63,11 @@ local function newindex_function(t, key, val)
     -- this should probably throw an error??
 end
 
+--- Create a new request object.
+-- A response object a table with some helper functions. You generally only access it via the helper functions
+-- or the magic of its metatable
+-- @param ngx magic nginx lua object
+-- @return a response object
 function _M.new(ngx)
     local self = {
 	ngx = ngx,
@@ -65,5 +75,15 @@ function _M.new(ngx)
     }
     return setmetatable(self, { __index = index_function, __newindex = newindex_function })
 end
+
+--- Request object can be access like a table.
+-- @field path path portion of the url
+-- @field query query string
+-- @field cookies raw cookie header
+-- @field ip client remote address
+-- @field host HTTP host header or the virtual server name
+-- @field header table like container of http request headers. req.header["User-Agent"]
+-- @table request
+
 
 return _M
