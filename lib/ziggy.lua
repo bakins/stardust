@@ -48,6 +48,8 @@ function _M.route(self, method, pattern, func)
     return true, nil
 end
 
+local route = _M.route
+
 -- be explicit for documentation...
 
 --- Convenience function to add a route for GET
