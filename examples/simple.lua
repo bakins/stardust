@@ -5,6 +5,7 @@
 
 local ziggy = require "ziggy"
 local cjson = require "cjson"
+local router = require "ziggy.router"
 
 local _M = {}
 
@@ -24,8 +25,10 @@ local function json(res, data)
 end
 
 local app = ziggy.new()
+local r = router.new()
+app:use(r)
 
-app:get("%.html?$", 
+r:get("%.html?$", 
 	function(req, res)
 	    return html(res, "<html>You came looking for " .. req.path .. "</html>")
 	end
@@ -33,7 +36,7 @@ app:get("%.html?$",
 
 local options = { foo = "bar" }
 
-app:get("^/options", 
+r:get("^/options", 
 	function(req, res)
 	    local foo = {
 		options = options,
