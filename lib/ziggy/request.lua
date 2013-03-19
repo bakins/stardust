@@ -8,15 +8,6 @@ local gsub = string.gsub
 
 local _M = {}
 
-local simple_indexes = {
-    query = args,
-    -- should provide a parse mechanism for cookies??
-    cookies = http_cookies,
-    ip = remote_addr,
-    path = uri,
-    host = host
-}
-
 -- raw index functions get the actual ngx object
 local raw_index_funcs = {
 }
@@ -37,19 +28,28 @@ local register_raw_index = _M.register_raw_index
 
 register_raw_index("header", function(ngx) return ngx.var["http_" .. gsub(lower(key), "-", "_")] end)
 
+local simple_indexes = {
+    query = "args",
+    -- should provide a parse mechanism for cookies??
+    cookies = "http_cookies",
+    ip = "remote_addr",
+    path = "uri",
+    host = "host"
+}
 for k,v in pairs(simple_indexes) do
-    register_raw_index(k, function(ngx) return ngx.var[k] end)
+    register_raw_index(k, function(ngx) return ngx.var[v] end)
 end
 
--- norma
 local function index_function(t, k)
-    local func = raw_index_funcs[k]
+    local func = rawget(raw_index_funcs, k)
     if func then
 	local ngx = rawget(t, "ngx")
 	return func(ngx)
     else
-	func = normal_index_funcs[k]
-	return func(t)
+	func = rawget(normal_index_funcs, k)
+	if func then
+	    return func(t)
+	end
     end
     return nil
 end
