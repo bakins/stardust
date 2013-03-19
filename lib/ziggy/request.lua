@@ -21,10 +21,23 @@ local raw_index_funcs = {
 local normal_index_funcs = {
 }
 
+--- Register a new "field" that can be used on a request object.  This is for when you need
+-- access to the "raw" nginx object.
+-- @param key the field name 
+-- @param func fucntion to call when the field is access. The function should take a single argument, the ngx object
+-- @usage Example:
+--ziggy.request.register_raw_index("foo", function(ngx) return ngx.var.http_x_foo end)
+--req.foo -- will return the HTTP request header "X-Foo"
 function _M.register_raw_index(key, func)
     raw_index_funcs[key] = func
 end
 
+--- Register a new "field" that can be used on a request object.  
+-- @param key the field name 
+-- @param func fucntion to call when the field is access. The function should take a single argument, the request
+-- @usage Example:
+--ziggy.request.register_raw_index("foo", function(req) return string.upper(req.header["User-Agent"]) end)
+--req.foo -- will the user-agent uppercased
 function _M.register_index(key, func)
     normal_index_funcs[key] = func
 end
@@ -84,6 +97,7 @@ end
 -- @field ip client remote address
 -- @field host HTTP host header or the virtual server name
 -- @field header table like container of http request headers. req.header["User-Agent"]
+-- @field ctx a Lua table that can be used as scratch space. No effort is made to avoid collisions, so namespace your keys.
 -- @table request
 
 
