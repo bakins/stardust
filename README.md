@@ -7,7 +7,7 @@ Ziggy Stardust (or just "ziggy") is a simple nginx/Lua framework inspired by
 [Mercury](https://github.com/nrk/mercury).
 
 It is currently in development and is little more than a toy. It may
-east your data and crash your computer.
+eat your data and crash your computer.
 
 Sample
 ------
