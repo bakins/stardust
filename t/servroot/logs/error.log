@@ -1,0 +1,12 @@
+2013/03/19 11:59:55 [notice] 1727#0: using the "epoll" event method
+2013/03/19 11:59:55 [notice] 1727#0: nginx/1.2.6
+2013/03/19 11:59:55 [notice] 1727#0: built by gcc 4.6.3 (Ubuntu/Linaro 4.6.3-1ubuntu5) 
+2013/03/19 11:59:55 [notice] 1727#0: OS: Linux 3.2.0-29-generic
+2013/03/19 11:59:55 [notice] 1727#0: getrlimit(RLIMIT_NOFILE): 1024:4096
+2013/03/19 11:59:55 [notice] 1728#0: *1 "/t(.*)" matches "/t/options", client: 127.0.0.1, server: localhost, request: "GET /t/options HTTP/1.1", host: "localhost"
+2013/03/19 11:59:55 [notice] 1728#0: *1 rewritten data: "/options", args: "", client: 127.0.0.1, server: localhost, request: "GET /t/options HTTP/1.1", host: "localhost"
+2013/03/19 11:59:55 [notice] 1728#0: *2 "/t(.*)" matches "/t/options", client: 127.0.0.1, server: localhost, request: "GET /t/options HTTP/1.1", host: "localhost"
+2013/03/19 11:59:55 [notice] 1728#0: *2 rewritten data: "/options", args: "", client: 127.0.0.1, server: localhost, request: "GET /t/options HTTP/1.1", host: "localhost"
+2013/03/19 11:59:55 [notice] 1728#0: signal 3 (SIGQUIT) received, shutting down
+2013/03/19 11:59:55 [info] 1728#0: epoll_wait() failed (4: Interrupted system call)
+2013/03/19 11:59:55 [notice] 1728#0: exit
