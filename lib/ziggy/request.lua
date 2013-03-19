@@ -49,7 +49,8 @@ end
 
 function _M.new(ngx)
     local self = {
-	ngx = ngx
+	ngx = ngx,
+	ctx = {}
     }
     return setmetatable(self, { __index = index_function, __newindex = newindex_function })
 end
