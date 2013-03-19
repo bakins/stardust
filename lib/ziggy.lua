@@ -6,6 +6,7 @@ local find = string.find
 local len = string.len
 
 local request = require "ziggy.request"
+local response = require "ziggy.response"
 
 local _M = {}
 
@@ -68,6 +69,7 @@ local function send_response(ngx, response)
 end
 
 local request_new = request.new
+local response_new = response.new
 
 function _M.run(self, ngx)
     local method = ngx.req.get_method()
@@ -78,7 +80,10 @@ function _M.run(self, ngx)
     for _,item in ipairs(routes) do
 	if find(ngx.var.uri, item.pattern) then
 	    -- we may want to provide a "wrapped" version of the request??
-	    return send_response(ngx, item.func(request_new(ngx)))
+	    local req, res = request_new(ngx), response_new(ngx)
+	    -- should wrap in pcall??
+	    item.func(req, res)
+	    return send_response(ngx, res)
 	end
     end
 end
