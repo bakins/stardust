@@ -17,30 +17,41 @@ local simple_indexes = {
     host = host
 }
 
-local index_funcs = {
+-- raw index functions get the actual ngx object
+local raw_index_funcs = {
 }
 
-function _M.register_index(key, func)
-    index_funcs[key] = func
+-- normal index functions get a "request" object
+local normal_index_funcs = {
+}
+
+function _M.register_raw_index(key, func)
+    raw_index_funcs[key] = func
 end
 
-local register_index = _M.register_index
+function _M.register_index(key, func)
+    normal_index_funcs[key] = func
+end
 
-register_index("header", function(ngx) return ngx.var["http_" .. gsub(lower(key), "-", "_")] end)
+local register_raw_index = _M.register_raw_index
+
+register_raw_index("header", function(ngx) return ngx.var["http_" .. gsub(lower(key), "-", "_")] end)
 
 for k,v in pairs(simple_indexes) do
-    register_index(k, function(ngx) return ngx.var[k] end)
+    register_raw_index(k, function(ngx) return ngx.var[k] end)
 end
 
-
+-- norma
 local function index_function(t, k)
-    local func = index_funcs[k]
+    local func = raw_index_funcs[k]
     if func then
 	local ngx = rawget(t, "ngx")
 	return func(ngx)
     else
-	return nil
+	func = normal_index_funcs[k]
+	return func(t)
     end
+    return nil
 end
 
 local function newindex_function(t, key, val)
