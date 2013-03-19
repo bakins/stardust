@@ -53,7 +53,7 @@ local function redis_wrapper(req, res)
     end
 
     red:set_keepalive(0, 100)
-    json(res, results)
+    json(res, { command = cmd, args = args, results = results })
 end
 
 r:get("/", redis_wrapper)
