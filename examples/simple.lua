@@ -37,7 +37,7 @@ app:get("%.html?$",
 	end
        )
 
-local options = { foo = "bar")
+local options = { foo = "bar" }
 
 app:get("^/options", 
 	function(req)
