@@ -88,7 +88,7 @@ simple example of creating and using middleware:
  The router is fairly simple and currently uses Lua string patterns to
  match routes. The routes are ran in order and the first match wins.
  
-## Request ## 
+## Request ##
 Lua module `ziggy.request`
 
 A request is generally read-only and is a thin wrapper around an HTTP
