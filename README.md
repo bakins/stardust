@@ -75,4 +75,34 @@ simple example of creating and using middleware:
  In this example, the body of the response will be converted to
  uppercase. The middleware can live in a module or be created "on the
  fly" -- ziggy doesn't care, it just needs to be a function that
- accepts a request and a response. Middleware should generally return `nil`  
+ accepts a request and a response. Middleware should generally return
+ `nil` . (Still figuring out when/how we want middleware to be able to
+ halt the request/response both for failure and success.)
+ 
+ In case you didn't notice, the router is just middleware. Middleware
+ is ran in the order it is registered using the `use` method.
+ 
+## Router ##
+ Lua module `ziggy.router`
+ 
+ The router is fairly simple and currently uses Lua string patterns to
+ match routes. The routes are ran in order and the first match wins.
+ 
+## Request ## 
+Lua module `ziggy.request`
+
+A request is generally read-only and is a thin wrapper around an HTTP
+request as used by nginx.   See the modules docs for the "fields."
+
+## Response ##
+Lua module `ziggy.response`
+
+Basically a table that has fields:
+
+* status - HTTP status code. defaults to 200
+* headers - Lua table of HTTP response headers
+* body - table or string of the actual response body
+
+All of these are read/write.
+
+
