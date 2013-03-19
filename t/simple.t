@@ -33,3 +33,21 @@ GET /t/options
 Content-Type: application/json
 --- no_error_log
 [error]
+
+
+
+=== TEST 2: basic html test
+--- http_config eval: $::HttpConfig
+--- config
+    location /t {
+        rewrite /t(.*) $1 break;
+        content_by_lua '
+            return require("simple").run(ngx)
+        ';
+    }
+--- request
+GET /t/foo.html
+--- response_headers
+Content-Type: text/html
+--- no_error_log
+[error]
