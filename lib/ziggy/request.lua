@@ -32,6 +32,7 @@ end
 local register_raw_index = _M.register_raw_index
 
 register_raw_index("header", function(ngx) return ngx.var["http_" .. gsub(lower(key), "-", "_")] end)
+register_raw_index("method", function(ngx) return ngx.req.get_method() end)
 
 local simple_indexes = {
     query = "args",
