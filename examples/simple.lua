@@ -8,40 +8,38 @@ local cjson = require "cjson"
 
 local _M = {}
 
-local function html(stuff)
-    return {
-	status = 200,
-	headers = {
-	    ["Content-Type"] = "text/html",
-	},
-	body = stuff
-   }    
+local function html(res, data)
+    res.status = 200
+    res.headers["Content-Type"] = "text/html"
+    res.body = data
+    return res
 end
 
 local encode = cjson.encode
-local function json(data)
-    return {
-	status = 200,
-	headers = {
-	    ["Content-Type"] = "application/json",
-	},
-	body = encode(data)
-   }    
+local function json(res, data)
+    res.status = 200
+    res.headers["Content-Type"] = "application/json"
+    res.body = encode(data)
+    return res
 end
 
 local app = ziggy.new()
 
 app:get("%.html?$", 
-	function(req)
-	    return html("<html>You came looking for " .. req.path .. "</html>")
+	function(req, res)
+	    return html(res, "<html>You came looking for " .. req.path .. "</html>")
 	end
        )
 
 local options = { foo = "bar" }
 
 app:get("^/options", 
-	function(req)
-	    return json(options)
+	function(req, res)
+	    local foo = {
+		options = options,
+		path = req.path
+	    }
+	    return json(res, foo)
 	end
        )
 
