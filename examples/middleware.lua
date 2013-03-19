@@ -6,7 +6,7 @@ local _M = {}
 
 -- stupid simple middleware that just uppercases response
 
-local function middleware(req, res, nxt)
+local function middleware(req, res)
     res.body = upper(res.body)
 end
 
