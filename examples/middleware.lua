@@ -1,6 +1,5 @@
 local upper = string.upper
 local ziggy = require "ziggy"
-local cjson = require "cjson"
 local router = require "ziggy.router"
 
 local _M = {}
