@@ -87,8 +87,14 @@ local response_new = response.new
 function _M.run(self, ngx)
     local req, res = request_new(ngx), response_new(ngx)
     local middleware = self.middleware
-    local func = middleware[1]
-    func(req, res, middleware[2] )
+    for i=1,#middleware do
+	local func = middleware[i]
+	local rc = func(req, res)
+	if rc ~= nil then
+	    -- what type of error handling do we want to do
+	    return ngx.exit(500)
+	end
+    end
     return send_response(ngx, res)
 end
 

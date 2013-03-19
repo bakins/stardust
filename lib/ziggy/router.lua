@@ -1,9 +1,13 @@
+--- Ziggy Router
+-- @module ziggy.router
+-- @alias _M
+
 local insert = table.insert
 local find = string.find
 
 local _M = {}
 
-local function call(self, req, res, nxt)
+local function call(self, req, res)
     local method = req.method
     local routes = self.routes[method]
     if not routes then
@@ -15,7 +19,6 @@ local function call(self, req, res, nxt)
 	    item.func(req, res)
 	end
     end
-    return nxt(req, res)
 end
 
 --- Create a new ziggy router.
