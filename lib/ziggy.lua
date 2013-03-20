@@ -59,7 +59,9 @@ local function send_response(ngx, response)
             headers["Content-Type"] = "text/plain"
         end
         local body = response.body or ""
-        headers["Content-Length"] = len(body)
+	if type(body) == "string" then
+	    headers["Content-Length"] = len(body)
+	end
         ngx.status = status
         for k,v in pairs(headers) do
             ngx.header[k] = v
