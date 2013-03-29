@@ -4,6 +4,7 @@
 
 local insert = table.insert
 local find = string.find
+local lower = string.lower
 
 local _M = {}
 
@@ -14,7 +15,7 @@ local function call(self, req, res)
 	return nil, "unhandled method: " .. method
     end
     for _,item in ipairs(routes) do
-	if find(ngx.var.uri, item.pattern) then
+	if item.pattern(ngx.var.uri) then
 	    -- should wrap in pcall??
 	    item.func(req, res)
 	end
@@ -26,6 +27,7 @@ end
 function _M.new()
     local self = {
 	routes = { 
+	    -- what about HEAD? count as head??
 	    GET = {},
 	    POST = {},
 	    PUT = {},
@@ -33,6 +35,39 @@ function _M.new()
 	}
     }
     return setmetatable(self, { __index = _M, __call = call })
+end
+
+-- is using __call slow???
+local pattern_mt = {
+    __tostring = "pattern: " .. self.pattern,
+    __call = function(self, ngx) return find(ngx.var.uri, self.pattern) end
+}
+
+function _M.pattern(self, pattern)
+    return setmetatable({ pattern = pattern })
+end
+
+local exact_mt = {
+    __tostring = "exact: " .. self.pattern,
+    __call = function(self, ngx) 
+	local uri = self.caseless and lower(ngx.var.uri) or ngx.var.uri
+	return uri == self.pattern 
+    end
+}
+
+function _M.exact(self, pattern, caseless)
+    return setmetatable({ pattern = caseless and lower(pattern) or pattern, caseless = caseless })
+end
+
+local regex_mt = {
+    __tostring = "regex: " .. self.pattern,
+    __call = function(self, ngx) 
+	return ngx.re.match(ngx.var.uri, self.pattern,  self.caseless and "io" or "o")
+    end
+}
+
+function _M.regex(self, pattern, caseless)
+    return setmetatable({ pattern = pattern, caseless = caseless })
 end
 
 --- Add a route
@@ -49,7 +84,9 @@ function _M.route(self, method, pattern, func)
 	return nil, "unhandled method: " .. method
     end
     -- should we test the pattern??
-    
+    if type(pattern) == "string" then
+	pattern = _M.pattern(self, pattern)
+    end
     insert(t, { pattern = pattern, func = func })
     return self
 end
