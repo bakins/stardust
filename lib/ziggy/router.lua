@@ -8,8 +8,8 @@ local lower = string.lower
 
 local _M = {}
 
-local function call(self, req, res)
-    local method = req.method
+local function call(self, ngx, res)
+    local method = ngx.req.get_method()
     local routes = self.routes[method]
     if not routes then
 	return nil, "unhandled method: " .. method
@@ -17,7 +17,8 @@ local function call(self, req, res)
     for _,item in ipairs(routes) do
 	if item.pattern(ngx.var.uri) then
 	    -- should wrap in pcall??
-	    item.func(req, res)
+	    -- maybe wrap all middleware in pcall?
+	    item.func(ngx, res)
 	end
     end
 end
@@ -43,6 +44,10 @@ local pattern_mt = {
     __call = function(self, ngx) return find(ngx.var.uri, self.pattern) end
 }
 
+--- Create a Lua string match match object for use with a route
+-- @param self ziggy router
+-- @param pattern Lua string mattern
+-- @return an object usable with a route
 function _M.pattern(self, pattern)
     return setmetatable({ pattern = pattern })
 end
@@ -55,6 +60,11 @@ local exact_mt = {
     end
 }
 
+--- Create a exact match object for use with a route. This just checks if two strings are equal
+-- @param self ziggy router
+-- @param pattern string to match
+-- @param caseless whether to do casless match. defaults for false
+-- @return an object usable with a route
 function _M.exact(self, pattern, caseless)
     return setmetatable({ pattern = caseless and lower(pattern) or pattern, caseless = caseless })
 end
@@ -66,17 +76,22 @@ local regex_mt = {
     end
 }
 
+--- Create a regex match object for use with a route
+-- @param self ziggy router
+-- @param pattern regular expression
+-- @param caseless whether to do casless match. defaults for false
+-- @return an object usable with a route
 function _M.regex(self, pattern, caseless)
     return setmetatable({ pattern = pattern, caseless = caseless })
 end
 
 --- Add a route
--- @param self ziggy application
+-- @param self ziggy router
 -- @param method HTTP method, ie GET, POST
--- @param pattern uri pattern to match
--- @param func function to call when this pattern is matched. fucntion should take 2 arguments: a request object and a response object
+-- @param pattern uri pattern to match. if this is a string, it is used as a Lua string pattern. Use the results from exact, regex, pattern ,etc
+-- @param func function to call when this pattern is matched. fucntion should take 2 arguments: nginx object and a response object
 -- @usage app = ziggy.new()
---app:route('GET', '/foo', function(req, res) res.body = "hello" end)
+--app:route('GET', '/foo', function(ngx, res) res.body = "hello" end)
 
 function _M.route(self, method, pattern, func)
     local t = self.routes[method]
