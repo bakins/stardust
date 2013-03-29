@@ -15,7 +15,7 @@ local response = require "ziggy.response"
 
 local _M = {}
 
-local function dummy_last_middleware(req, res, nxt)
+local function dummy_last_middleware(ngx, res, nxt)
     -- http://wiki.nginx.org/HttpLuaModule#ngx.req.discard_body
     -- if noone else read it, just throw it away
     ngx.req.discard_body()
@@ -78,20 +78,19 @@ local function send_response(ngx, response)
     end
 end
 
-local request_new = request.new
 local response_new = response.new
 
 --- Run the application
 -- @param self ziggy application
--- @param ngx magix nginx Lua object
+-- @param ngx magic nginx Lua object
 -- @usage Add something like this to nginx.conf:
 --content_by_lua 'return require("my.ziggy.module").run(ngx)';
 function _M.run(self, ngx)
-    local req, res = request_new(ngx), response_new(ngx)
+    local res = response_new(ngx)
     local middleware = self.middleware
     for i=1,#middleware do
 	local func = middleware[i]
-	local rc = func(req, res)
+	local rc = func(ngx, res)
 	if rc ~= nil then
 	    -- what type of error handling do we want to do
 	    return ngx.exit(500)

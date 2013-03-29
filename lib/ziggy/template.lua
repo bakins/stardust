@@ -1,3 +1,7 @@
+--- Ziggy Template
+-- @module ziggy.template
+-- @alias _M
+
 local gsub = string.gsub
 local _M = {}
 
