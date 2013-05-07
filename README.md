@@ -1,7 +1,7 @@
 Ziggy Stardust
 ==========
 
-Ziggy Stardust (or just "ziggy") is a simple nginx/Lua framework inspired by
+Ziggy Stardust (or just "stardust") is a simple nginx/Lua framework inspired by
 [Sinatra](http://www.sinatrarb.com/),
 [Express](http://expressjs.com/), and
 [Mercury](https://github.com/nrk/mercury).
@@ -11,12 +11,12 @@ eat your data and crash your computer.
 
 Sample
 ------
-The easiest way to explain ziggy is to show an example.
+The easiest way to explain stardust is to show an example.
 
-    local ziggy = require "ziggy"
-    local router = require "ziggy.router"
+    local stardust = require "stardust"
+    local router = require "stardust.router"
     
-    local app = ziggy.new()
+    local app = stardust.new()
     local r = router.new()
     app:use(r)
     
@@ -48,9 +48,9 @@ The modules are documented using
 "real" documentation.
 
 ## Core ##
-Lua module `ziggy`
+Lua module `stardust`
 
-The core of ziggy doesn't do much. It is used to create and run and
+The core of stardust doesn't do much. It is used to create and run and
 app. It is also used to register middleware for an app.
 
 ## Middleware ##
@@ -58,7 +58,7 @@ Middleware is where the actual work happens. Here's and extremely
 simple example of creating and using middleware:
 
     
-    local app = ziggy.new()
+    local app = stardust.new()
     local r = router.new()
     app:use(r)
     
@@ -74,7 +74,7 @@ simple example of creating and using middleware:
        
  In this example, the body of the response will be converted to
  uppercase. The middleware can live in a module or be created "on the
- fly" -- ziggy doesn't care, it just needs to be a function that
+ fly" -- stardust doesn't care, it just needs to be a function that
  accepts a request and a response. Middleware should generally return
  `nil` . (Still figuring out when/how we want middleware to be able to
  halt the request/response both for failure and success.)
@@ -83,19 +83,19 @@ simple example of creating and using middleware:
  is ran in the order it is registered using the `use` method.
  
 ## Router ##
- Lua module `ziggy.router`
+ Lua module `stardust.router`
  
  The router is fairly simple and currently uses Lua string patterns to
  match routes. The routes are ran in order and the first match wins.
  
 ## Request ##
-Lua module `ziggy.request`
+Lua module `stardust.request`
 
 A request is generally read-only and is a thin wrapper around an HTTP
 request as used by nginx.   See the modules docs for the "fields."
 
 ## Response ##
-Lua module `ziggy.response`
+Lua module `stardust.response`
 
 Basically a table that has fields:
 
