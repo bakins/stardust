@@ -1,6 +1,6 @@
 local upper = string.upper
-local ziggy = require "ziggy"
-local router = require "ziggy.router"
+local stardust = require "ziggy"
+local router = require "stardust.router"
 
 local _M = {}
 
@@ -10,7 +10,7 @@ local function middleware(req, res)
     res.body = upper(res.body)
 end
 
-local app = ziggy.new()
+local app = stardust.new()
 local r = router.new()
 app:use(r)
 app:use(middleware)

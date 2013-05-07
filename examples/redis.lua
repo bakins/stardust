@@ -1,7 +1,7 @@
 -- very simple redis HTTP api
 
-local ziggy = require "ziggy"
-local router = require "ziggy.router"
+local stardust = require "ziggy"
+local router = require "stardust.router"
 local redis = require "resty.redis"
 local cjson = require "cjson"
 local encode = cjson.encode
@@ -11,7 +11,7 @@ local gmatch = string.gmatch
 
 local _M = {}
 
-local app = ziggy.new()
+local app = stardust.new()
 local r = router.new()
 app:use(r)
 

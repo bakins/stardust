@@ -3,9 +3,9 @@
 -- not sure we gain anything by abstracting away the nginx object
 -- maybe enforcing best practices?? or just convienience?
 
-local ziggy = require "ziggy"
+local stardust = require "ziggy"
 local cjson = require "cjson"
-local router = require "ziggy.router"
+local router = require "stardust.router"
 
 local _M = {}
 
@@ -24,7 +24,7 @@ local function json(res, data)
     return res
 end
 
-local app = ziggy.new()
+local app = stardust.new()
 local r = router.new()
 app:use(r)
 
@@ -47,7 +47,7 @@ r:get("^/options",
        )
 
 -- add this to content_by_lua like
--- content_by_lua = 'return require("ziggy.examples.simple").run(ngx)'
+-- content_by_lua = 'return require("stardust.examples.simple").run(ngx)'
 
 function _M.run(ngx)
     return app:run(ngx)
