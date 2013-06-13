@@ -6,6 +6,7 @@ local insert = table.insert
 local find = string.find
 local lower = string.lower
 local upper = string.upper
+local request = require "stardust.request"
 
 local _M = {}
 
@@ -17,7 +18,13 @@ local function call(self, req, res)
 	local route = routes[i]
 	local m = route.method
 	if (not m) or m == method then
-	    if route.pattern(uri) then
+	    local rc = route.pattern(uri)
+	    if rc then
+		if type(rc) == "table" then
+		    req.ctx.__params = rc
+		else
+		    req.ctx.__params = nil
+		end
 		-- should wrap in pcall??
 		-- maybe wrap all middleware in pcall?
 		return route.func(req, res)
@@ -25,6 +32,12 @@ local function call(self, req, res)
 	end
     end
 end
+
+request.register_index("params",
+		       function(req)
+			   return req.ctx.__params or {}
+		       end
+		      )
 
 local mt = { __index = _M, __call = call }
 --- Create a new stardust router.
