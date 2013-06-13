@@ -47,6 +47,27 @@ r:get("^/options",
       end
      )
 
+-- An example using a capture and getting the caputure in params
+r:get(r:regex([[/something/(\d+)]]),
+      function(req, res)
+	   return json(res, { id = req.params[1] })
+       end
+     )
+
+-- Using a named capture
+r:get(r:regex([[/another/(?<id>\d+)]]),
+      function(req, res)
+	   return json(res, { id = req.params.id })
+       end
+     )
+
+-- using a capture ina Lua pattern
+r:get("/id/(%d)",
+      function(req, res)
+	  return json(res, { id = req.params[1] })
+      end
+     )
+
 -- add this to content_by_lua like
 -- content_by_lua = 'return require("stardust.examples.simple").run(ngx)'
 
