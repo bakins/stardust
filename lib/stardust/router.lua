@@ -52,7 +52,11 @@ function _M.new()
 end
 
 function pack(...)
-    return { n = select("#", ...), ... }
+    if ... then
+	return { n = select("#", ...), ... }
+    else
+	return nil
+    end
 end
 
 -- is using __call slow???
