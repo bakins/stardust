@@ -61,6 +61,13 @@ r:get(r:regex([[/another/(?<id>\d+)]]),
        end
      )
 
+-- using a capture ina Lua pattern
+r:get("/id/(%d)",
+      function(req, res)
+	  return json(res, { id = req.params[1] })
+      end
+     )
+
 -- add this to content_by_lua like
 -- content_by_lua = 'return require("stardust.examples.simple").run(ngx)'
 
