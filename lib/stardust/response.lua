@@ -4,6 +4,7 @@
 
 local _M = {}
 
+local mt = { __index = _M }
 --- Create a new response object.
 -- A response object is just a table with some helper functions.
 -- @param ngx magic nginx lua object
@@ -12,6 +13,7 @@ local _M = {}
 -- * status - should be an http code as an integer
 -- * headers - a table of http response headers
 -- * body - a string of the http response
+
 function _M.new(ngx)
     local self = {
 	ngx = ngx,
@@ -19,7 +21,7 @@ function _M.new(ngx)
 	headers = {},
 	body = nil
     }
-    return self
+    return setmetatable(self, mt)
 end
 
 --- Send the repsonse to the client
