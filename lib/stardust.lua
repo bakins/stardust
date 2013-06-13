@@ -1,10 +1,5 @@
 --- Ziggy
 -- @module stardust
--- @alias _M
-
-
--- Random thoughts
--- maybe have different types of matches? exact, location/trie, regex, pattern
 
 local insert = table.insert
 local find = string.find
@@ -15,18 +10,11 @@ local response = require "stardust.response"
 
 local _M = {}
 
-local function dummy_last_middleware(ngx, res, nxt)
-    -- http://wiki.nginx.org/HttpLuaModule#ngx.req.discard_body
-    -- if noone else read it, just throw it away
-    ngx.req.discard_body()
-end
-
 --- Create a new stardust application.
 -- @return a stardust application
 function _M.new()
     local self = {
-	middleware = { 
-	    dummy_last_middleware
+	middleware = {
 	}
     }
     return setmetatable(self, { __index = _M })
@@ -37,46 +25,13 @@ end
 -- Also add middleware before adding routes
 -- @param self stardust application
 -- @param func function to call
-function _M.use(self, func) 
-    -- this is horrible, but makes sure our dummy function stays last
-    local t = self.middleware
-    local size = #t
-    local dummy = t[size]
-    t[size] = func
-    t[size+1] = dummy
+function _M.use(self, func)
+    insert(self.middleware, func)
     return self
 end
 
 -- lifted from, LSD, ouzo, etc
 -- could maybe use a function or table for body???
-local function send_response(ngx, response)
-    local headers = response.headers or {}
-    local status = tonumber(response.status) or 500
-    
-    if status < 500 then
-        local content_type = headers["Content-Type"]
-        if not content_type then
-            headers["Content-Type"] = "text/plain"
-        end
-        local body = response.body or ""
-	if type(body) == "string" then
-	    headers["Content-Length"] = len(body)
-	end
-        ngx.status = status
-        for k,v in pairs(headers) do
-            ngx.header[k] = v
-        end
-        
-        ngx.print(body)
-        ngx.eof()
-    else
-        local error = response.error
-        if error then
-            ngx.log(ngx.ERR, status .. ": " .. error) 
-        end
-        return ngx.exit(status)
-    end
-end
 
 local response_new = response.new
 

@@ -22,4 +22,35 @@ function _M.new(ngx)
     return self
 end
 
+--- Send the repsonse to the client
+-- You should call this only once
+-- @tparam stardust.response self
+function _M.send(self)
+    -- do we need to check if we have send the response yet or not?
+    local ngx = self.ngx
+    -- to ensure keepalives, etc work correctly
+    ngx.req.discard_body()
+    local headers = self.headers or {}
+    local status = tonumber(self.status) or 500
+
+    if status < 500 then
+        local content_type = headers["Content-Type"]
+        if not content_type then
+            headers["Content-Type"] = "text/plain"
+        end
+        local body = response.body or ""
+	if type(body) == "string" then
+	    headers["Content-Length"] = len(body)
+	end
+        ngx.status = status
+        for k,v in pairs(headers) do
+            ngx.header[k] = v
+        end
+        ngx.print(body)
+        ngx.eof()
+    else
+        n ngx.exit(status)
+    end
+end
+
 return _M
