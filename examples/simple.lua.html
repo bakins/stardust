@@ -106,6 +106,27 @@ r:get(<span class="string">"^/options"</span>,
       <span class="keyword">end</span>
      )
 
+<span class="comment">-- An example using a capture and getting the caputure in params
+</span>r:get(r:regex(<span class="string">[[/something/(\d+)]]</span>),
+      <span class="keyword">function</span>(req, res)
+	   <span class="keyword">return</span> json(res, { id = req.params[<span class="number">1</span>] })
+       <span class="keyword">end</span>
+     )
+
+<span class="comment">-- Using a named capture
+</span>r:get(r:regex(<span class="string">[[/another/(?&lt;id&gt;\d+)]]</span>),
+      <span class="keyword">function</span>(req, res)
+	   <span class="keyword">return</span> json(res, { id = req.params.id })
+       <span class="keyword">end</span>
+     )
+
+<span class="comment">-- using a capture ina Lua pattern
+</span>r:get(<span class="string">"/id/(%d)"</span>,
+      <span class="keyword">function</span>(req, res)
+	  <span class="keyword">return</span> json(res, { id = req.params[<span class="number">1</span>] })
+      <span class="keyword">end</span>
+     )
+
 <span class="comment">-- add this to content_by_lua like
 </span><span class="comment">-- content_by_lua = 'return require("stardust.examples.simple").run(ngx)'
 </span>
