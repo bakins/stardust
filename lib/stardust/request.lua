@@ -13,28 +13,13 @@ local gsub = string.gsub
 
 local _M = {}
 
--- raw index functions get the actual ngx object
-local raw_index_funcs = {
-}
-
 -- normal index functions get a "request" object
-local normal_index_funcs = {
+local index_funcs = {
 }
 
---- Register a new "field" that can be used on a request object.  This is for when you need
--- access to the "raw" nginx object.
--- @param key the field name 
--- @param func fucntion to call when the field is access. The function should take a single argument, the ngx object
--- @usage Example:
---stardust.request.register_raw_index("foo", function(ngx) return ngx.var.http_x_foo end)
---req.foo -- will return the HTTP request header "X-Foo"
-function _M.register_raw_index(key, func)
-    raw_index_funcs[key] = func
-end
-
---- Register a new "field" that can be used on a request object.  
--- @param key the field name 
--- @param func fucntion to call when the field is access. The function should take a single argument, the request
+--- Register a new "field" that can be used on a request object.
+-- @param key the field name
+-- @param func function to call when the field is access. The function should take a single argument, the request
 -- @usage Example:
 --stardust.request.register_raw_index("foo", function(req) return string.upper(req.header["User-Agent"]) end)
 --req.foo -- will the user-agent uppercased
@@ -42,10 +27,9 @@ function _M.register_index(key, func)
     normal_index_funcs[key] = func
 end
 
-local register_raw_index = _M.register_raw_index
-
-register_raw_index("header", function(ngx) return ngx.var["http_" .. gsub(lower(key), "-", "_")] end)
-register_raw_index("method", function(ngx) return ngx.req.get_method() end)
+local register_index =  _M.register_index
+register_index("header", function(req) return req.ngx.var["http_" .. gsub(lower(key), "-", "_")] end)
+register_index("method", function(req) return req.ngx.req.get_method() end)
 
 local simple_indexes = {
     query = "args",
@@ -55,20 +39,23 @@ local simple_indexes = {
     path = "uri",
     host = "host"
 }
+
 for k,v in pairs(simple_indexes) do
-    register_raw_index(k, function(ngx) return ngx.var[v] end)
+    register_index(k, function(req) return req.ngx.var[v] end)
+end
+
+local common_headers = {
+    ["User-Agent"] = "http_user_agent"
+}
+
+for k,v in pairs(common_headers) do
+    register_index(k, function(req) return req.ngx.var[v] end)
 end
 
 local function index_function(t, k)
-    local func = rawget(raw_index_funcs, k)
+    local func = rawget(index_funcs, k)
     if func then
-	local ngx = rawget(t, "ngx")
-	return func(ngx)
-    else
-	func = rawget(normal_index_funcs, k)
-	if func then
-	    return func(t)
-	end
+	return func(t)
     end
     return nil
 end
