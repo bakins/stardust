@@ -3,7 +3,7 @@
 -- @alias _M
 
 local insert = table.insert
-local find = string.find
+local match = string.match
 local lower = string.lower
 local upper = string.upper
 local request = require "stardust.request"
@@ -51,10 +51,17 @@ function _M.new()
     return setmetatable(self, mt)
 end
 
+function pack(...)
+    return { n = select("#", ...), ... }
+end
+
 -- is using __call slow???
 local pattern_mt = {
     __tostring = function(self) return "pattern: " .. self.pattern end,
-    __call = function(self, uri) return find(uri, self.pattern) end
+    __call = function(self, uri)
+	local t = pack(match(uri, self.pattern))
+	return (t and #t > 0) and t or nil
+    end
 }
 
 --- Create a Lua string match match object for use with a route
