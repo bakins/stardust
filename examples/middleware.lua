@@ -1,5 +1,5 @@
 local upper = string.upper
-local stardust = require "ziggy"
+local stardust = require "stardust"
 local router = require "stardust.router"
 
 local _M = {}
