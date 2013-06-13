@@ -13,13 +13,14 @@ local mt = { __index = _M }
 -- * status - should be an http code as an integer
 -- * headers - a table of http response headers
 -- * body - a string of the http response
-
+-- * ctx - a Lua table that can be used as scratch space. No effort is made to avoid collisions, so namespace your keys.
 function _M.new(ngx)
     local self = {
 	ngx = ngx,
 	status = 200,
 	headers = {},
-	body = nil
+	body = nil,
+	ctx = {}
     }
     return setmetatable(self, mt)
 end
