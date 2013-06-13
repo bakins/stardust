@@ -1,5 +1,5 @@
 --- Ziggy
--- @module ziggy
+-- @module stardust
 -- @alias _M
 
 
@@ -10,8 +10,8 @@ local insert = table.insert
 local find = string.find
 local len = string.len
 
-local request = require "ziggy.request"
-local response = require "ziggy.response"
+local request = require "stardust.request"
+local response = require "stardust.response"
 
 local _M = {}
 
@@ -21,8 +21,8 @@ local function dummy_last_middleware(ngx, res, nxt)
     ngx.req.discard_body()
 end
 
---- Create a new ziggy application.
--- @return a ziggy application
+--- Create a new stardust application.
+-- @return a stardust application
 function _M.new()
     local self = {
 	middleware = { 
@@ -35,7 +35,7 @@ end
 --- Add middleware to the stack. Middleware is called in the order it is added. While it is technically possible to add middleware 
 -- after the application has started (ie, calling run), this is not supported and may lead to strange results.
 -- Also add middleware before adding routes
--- @param self ziggy application
+-- @param self stardust application
 -- @param func function to call
 function _M.use(self, func) 
     -- this is horrible, but makes sure our dummy function stays last
@@ -81,10 +81,10 @@ end
 local response_new = response.new
 
 --- Run the application
--- @param self ziggy application
+-- @param self stardust application
 -- @param ngx magic nginx Lua object
 -- @usage Add something like this to nginx.conf:
---content_by_lua 'return require("my.ziggy.module").run(ngx)';
+--content_by_lua 'return require("my.stardust.module").run(ngx)';
 function _M.run(self, ngx)
     local res = response_new(ngx)
     local middleware = self.middleware
