@@ -5,7 +5,7 @@
 local insert = table.insert
 local find = string.find
 local lower = string.lower
-locla upper = string.upper
+local upper = string.upper
 
 local _M = {}
 
@@ -40,7 +40,7 @@ end
 
 -- is using __call slow???
 local pattern_mt = {
-    __tostring = fucntion(self) return "pattern: " .. self.pattern end
+    __tostring = function(self) return "pattern: " .. self.pattern end,
     __call = function(self, uri) return find(uri, self.pattern) end
 }
 
@@ -53,7 +53,7 @@ function _M.pattern(self, pattern)
 end
 
 local exact_mt = {
-    __tostring = function(self) return "exact: " .. self.pattern end
+    __tostring = function(self) return "exact: " .. self.pattern end,
     __call = function(self, uri)
 	local uri = self.caseless and lower(uri) or uri
 	return uri == self.pattern
@@ -70,7 +70,7 @@ function _M.exact(self, pattern, caseless)
 end
 
 local regex_mt = {
-    __tostring = fucntion(self) return "regex: " .. self.pattern end
+    __tostring = function(self) return "regex: " .. self.pattern end,
     __call = function(self, uri)
 	return ngx.re.match(uri, self.pattern, self.caseless and "io" or "o")
     end
@@ -142,6 +142,15 @@ end
 -- @see route
 function _M.delete(self, pattern, func)
     return route(self, "DELETE", pattern, func)
+end
+
+--- Convenience function to add a route that matches all http methods
+-- @param self stardust application
+-- @param pattern uri pattern to match
+-- @param func function
+-- @see route
+function _M.all(self, pattern, func)
+    return route(self, nil, pattern, func)
 end
 
 return _M

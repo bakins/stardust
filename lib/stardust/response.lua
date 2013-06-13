@@ -2,6 +2,8 @@
 -- @module stardust.response
 -- @alias _M
 
+local len = string.len
+
 local _M = {}
 
 local mt = { __index = _M }
@@ -41,7 +43,7 @@ function _M.send(self)
         if not content_type then
             headers["Content-Type"] = "text/plain"
         end
-        local body = response.body or ""
+        local body = self.body or ""
 	if type(body) == "string" then
 	    headers["Content-Length"] = len(body)
 	end
@@ -52,7 +54,7 @@ function _M.send(self)
         ngx.print(body)
         ngx.eof()
     else
-        n ngx.exit(status)
+        return ngx.exit(status)
     end
 end
 
