@@ -24,7 +24,7 @@ local index_funcs = {
 --stardust.request.register_raw_index("foo", function(req) return string.upper(req.header["User-Agent"]) end)
 --req.foo -- will the user-agent uppercased
 function _M.register_index(key, func)
-    normal_index_funcs[key] = func
+    index_funcs[key] = func
 end
 
 local register_index =  _M.register_index
