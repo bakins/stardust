@@ -1,5 +1,5 @@
 --- Ziggy Response
--- @module ziggy.response
+-- @module stardust.response
 -- @alias _M
 
 local _M = {}

@@ -1,6 +1,6 @@
 -- very simple redis HTTP api
 
-local stardust = require "ziggy"
+local stardust = require "stardust"
 local router = require "stardust.router"
 local redis = require "resty.redis"
 local cjson = require "cjson"

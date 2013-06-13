@@ -1,5 +1,5 @@
 --- Ziggy Router
--- @module ziggy.router
+-- @module stardust.router
 -- @alias _M
 
 local insert = table.insert
@@ -23,8 +23,8 @@ local function call(self, ngx, res)
     end
 end
 
---- Create a new ziggy router.
--- @return a ziggy router
+--- Create a new stardust router.
+-- @return a stardust router
 function _M.new()
     local self = {
 	routes = { 
@@ -45,7 +45,7 @@ local pattern_mt = {
 }
 
 --- Create a Lua string match match object for use with a route
--- @param self ziggy router
+-- @param self stardust router
 -- @param pattern Lua string mattern
 -- @return an object usable with a route
 function _M.pattern(self, pattern)
@@ -61,7 +61,7 @@ local exact_mt = {
 }
 
 --- Create a exact match object for use with a route. This just checks if two strings are equal
--- @param self ziggy router
+-- @param self stardust router
 -- @param pattern string to match
 -- @param caseless whether to do casless match. defaults for false
 -- @return an object usable with a route
@@ -77,7 +77,7 @@ local regex_mt = {
 }
 
 --- Create a regex match object for use with a route
--- @param self ziggy router
+-- @param self stardust router
 -- @param pattern regular expression
 -- @param caseless whether to do casless match. defaults for false
 -- @return an object usable with a route
@@ -86,11 +86,11 @@ function _M.regex(self, pattern, caseless)
 end
 
 --- Add a route
--- @param self ziggy router
+-- @param self stardust router
 -- @param method HTTP method, ie GET, POST
 -- @param pattern uri pattern to match. if this is a string, it is used as a Lua string pattern. Use the results from exact, regex, pattern ,etc
 -- @param func function to call when this pattern is matched. fucntion should take 2 arguments: nginx object and a response object
--- @usage app = ziggy.new()
+-- @usage app = stardust.new()
 --app:route('GET', '/foo', function(ngx, res) res.body = "hello" end)
 
 function _M.route(self, method, pattern, func)
@@ -111,7 +111,7 @@ local route = _M.route
 -- be explicit for documentation...
 
 --- Convenience function to add a route for GET
--- @param self ziggy application
+-- @param self stardust application
 -- @param pattern uri pattern to match
 -- @param func function
 -- @see route
@@ -120,7 +120,7 @@ function _M.get(self, pattern, func)
 end
 
 --- Convenience function to add a route for POST
--- @param self ziggy application
+-- @param self stardust application
 -- @param pattern uri pattern to match
 -- @param func function
 -- @see route
@@ -129,7 +129,7 @@ function _M.post(self, pattern, func)
 end
 
 --- Convenience function to add a route for PUT
--- @param self ziggy application
+-- @param self stardust application
 -- @param pattern uri pattern to match
 -- @param func function
 -- @see route
@@ -138,7 +138,7 @@ function _M.put(self, pattern, func)
 end
 
 --- Convenience function to add a route for DELETE
--- @param self ziggy application
+-- @param self stardust application
 -- @param pattern uri pattern to match
 -- @param func function
 -- @see route

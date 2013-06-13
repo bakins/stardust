@@ -3,7 +3,7 @@
 -- not sure we gain anything by abstracting away the nginx object
 -- maybe enforcing best practices?? or just convienience?
 
-local stardust = require "ziggy"
+local stardust = require "stardust"
 local cjson = require "cjson"
 local router = require "stardust.router"
 
