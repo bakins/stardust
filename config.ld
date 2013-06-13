@@ -1,5 +1,5 @@
 file = 'lib'
 examples = { 'examples' }
-dir = 'docs'
+dir = '.'
 readme = "README.md"
 format = 'discount'
