@@ -14,8 +14,10 @@ local app = stardust.new()
 local r = router.new()
 app:use(r)
 app:use(middleware)
+-- TODO: wrap this in a reusable middleware
+app:use(function(req, res) return res:send() end)
 
-r:get("/", 
+r:get("/",
       function(req, res)
 	  res.body = req.path .. "\n"
       end
