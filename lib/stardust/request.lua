@@ -33,6 +33,7 @@ register_index("method", function(req) return req.ngx.req.get_method() end)
 
 local simple_indexes = {
     query = "args",
+    args = "args",
     -- should provide a parse mechanism for cookies??
     cookies = "http_cookies",
     ip = "remote_addr",
