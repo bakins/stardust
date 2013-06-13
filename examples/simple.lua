@@ -13,7 +13,6 @@ local function html(res, data)
     res.status = 200
     res.headers["Content-Type"] = "text/html"
     res.body = data
-    return res
 end
 
 local encode = cjson.encode
@@ -21,30 +20,32 @@ local function json(res, data)
     res.status = 200
     res.headers["Content-Type"] = "application/json"
     res.body = encode(data)
-    return res
 end
 
 local app = stardust.new()
 local r = router.new()
 app:use(r)
 
-r:get("%.html?$", 
-	function(req, res)
-	    return html(res, "<html>You came looking for " .. req.path .. "</html>")
-	end
-       )
+-- TODO: wrap this in a reusable middleware
+app:use(function(req, res) return res:send() end)
+
+r:get("%.html?$",
+      function(req, res)
+	  return html(res, "<html>You came looking for " .. req.path .. "</html>")
+      end
+     )
 
 local options = { foo = "bar" }
 
-r:get("^/options", 
-	function(req, res)
-	    local foo = {
-		options = options,
-		path = req.path
-	    }
-	    return json(res, foo)
-	end
-       )
+r:get("^/options",
+      function(req, res)
+	  local foo = {
+	      options = options,
+	      path = req.path
+	  }
+	  return json(res, foo)
+      end
+     )
 
 -- add this to content_by_lua like
 -- content_by_lua = 'return require("stardust.examples.simple").run(ngx)'
