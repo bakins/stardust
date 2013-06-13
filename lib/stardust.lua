@@ -20,7 +20,7 @@ function _M.new()
     return setmetatable(self, { __index = _M })
 end
 
---- Add middleware to the stack. Middleware is called in the order it is added. While it is technically possible to add middleware 
+--- Add middleware to the stack. Middleware is called in the order it is added. While it is technically possible to add middleware
 -- after the application has started (ie, calling run), this is not supported and may lead to strange results.
 -- Also add middleware before adding routes
 -- @param self stardust application
@@ -30,10 +30,8 @@ function _M.use(self, func)
     return self
 end
 
--- lifted from, LSD, ouzo, etc
--- could maybe use a function or table for body???
-
 local response_new = response.new
+local request_new = request.new
 
 --- Run the application
 -- @param self stardust application
@@ -42,16 +40,17 @@ local response_new = response.new
 --content_by_lua 'return require("my.stardust.module").run(ngx)';
 function _M.run(self, ngx)
     local res = response_new(ngx)
+    local req = request_new(ngx)
     local middleware = self.middleware
     for i=1,#middleware do
 	local func = middleware[i]
-	local rc = func(ngx, res)
+	local rc = func(req, res)
 	if rc ~= nil then
 	    -- what type of error handling do we want to do
+	    -- should we just assume we stop the loop here rather than throwing an error?
 	    return ngx.exit(500)
 	end
     end
-    return send_response(ngx, res)
 end
 
 return _M
