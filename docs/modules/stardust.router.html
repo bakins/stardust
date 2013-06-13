@@ -1,0 +1,392 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul>
+  <li><a href="../modules/stardust.html">stardust</a></li>
+  <li><a href="../modules/stardust.request.html">stardust.request</a></li>
+  <li><a href="../modules/stardust.response.html">stardust.response</a></li>
+  <li><strong>stardust.router</strong></li>
+</ul>
+<h2>Topics</h2>
+<ul>
+  <li><a href="../topics/README.md.html">README.md</a></li>
+</ul>
+<h2>Examples</h2>
+<ul>
+  <li><a href="../examples/middleware.lua.html">middleware.lua</a></li>
+  <li><a href="../examples/redis.lua.html">redis.lua</a></li>
+  <li><a href="../examples/simple.lua.html">simple.lua</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>stardust.router</code></h1>
+
+<p>Ziggy Router</p>
+<p>
+</p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#new">new&nbsp;()</a></td>
+	<td class="summary">Create a new stardust router.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#pattern">pattern&nbsp;(self, pattern)</a></td>
+	<td class="summary">Create a Lua string match match object for use with a route</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#exact">exact&nbsp;(self, pattern, caseless)</a></td>
+	<td class="summary">Create a exact match object for use with a route.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#regex">regex&nbsp;(self, pattern, caseless)</a></td>
+	<td class="summary">Create a regex match object for use with a route</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#route">route&nbsp;(self, method, pattern, func)</a></td>
+	<td class="summary">Add a route</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get">get&nbsp;(self, pattern, func)</a></td>
+	<td class="summary">Convenience function to add a route for GET</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#post">post&nbsp;(self, pattern, func)</a></td>
+	<td class="summary">Convenience function to add a route for POST</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#put">put&nbsp;(self, pattern, func)</a></td>
+	<td class="summary">Convenience function to add a route for PUT</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#delete">delete&nbsp;(self, pattern, func)</a></td>
+	<td class="summary">Convenience function to add a route for DELETE</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#all">all&nbsp;(self, pattern, func)</a></td>
+	<td class="summary">Convenience function to add a route that matches all http methods</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2><a name="Functions"></a>Functions</h2>
+    <dl class="function">
+    <dt>
+    <a name = "new"></a>
+    <strong>new&nbsp;()</strong>
+    </dt>
+    <dd>
+    Create a new stardust router.
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        a stardust router
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "pattern"></a>
+    <strong>pattern&nbsp;(self, pattern)</strong>
+    </dt>
+    <dd>
+    Create a Lua string match match object for use with a route
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         stardust router</li>
+        <li><span class="parameter">pattern</span>
+         Lua string mattern</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        an object usable with a route
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "exact"></a>
+    <strong>exact&nbsp;(self, pattern, caseless)</strong>
+    </dt>
+    <dd>
+    Create a exact match object for use with a route.  This just checks if two strings are equal
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         stardust router</li>
+        <li><span class="parameter">pattern</span>
+         string to match</li>
+        <li><span class="parameter">caseless</span>
+         whether to do casless match. defaults to false</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        an object usable with a route
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "regex"></a>
+    <strong>regex&nbsp;(self, pattern, caseless)</strong>
+    </dt>
+    <dd>
+    Create a regex match object for use with a route
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         stardust router</li>
+        <li><span class="parameter">pattern</span>
+         regular expression</li>
+        <li><span class="parameter">caseless</span>
+         whether to do casless match. defaults for false</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        an object usable with a route
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "route"></a>
+    <strong>route&nbsp;(self, method, pattern, func)</strong>
+    </dt>
+    <dd>
+    Add a route
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+            <span class="types"><a class="type" href="../modules/stardust.router.html#">stardust.router</a></span>
+
+</li>
+        <li><span class="parameter">method</span>
+         HTTP method, ie GET, POST. If nil, this will apply to all methods</li>
+        <li><span class="parameter">pattern</span>
+         uri pattern to match. if this is a string, it is used as a Lua string pattern. Use the results from exact, regex, pattern ,etc</li>
+        <li><span class="parameter">func</span>
+         function to call when this pattern is matched. fucntion should take 2 arguments: nginx object and a response object</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+          <span class="types"><a class="type" href="../modules/stardust.router.html#">stardust.router</a></span>
+        self
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">app = stardust.new()
+app:route(<span class="string">'GET'</span>, <span class="string">'/foo'</span>, <span class="keyword">function</span>(ngx, res) res.body = <span class="string">"hello"</span> <span class="keyword">end</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "get"></a>
+    <strong>get&nbsp;(self, pattern, func)</strong>
+    </dt>
+    <dd>
+    Convenience function to add a route for GET
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         stardust application</li>
+        <li><span class="parameter">pattern</span>
+         uri pattern to match</li>
+        <li><span class="parameter">func</span>
+         function</li>
+    </ul>
+
+
+
+    <h3>see also:</h3>
+    <ul>
+         <a href="../modules/stardust.router.html#route">route</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "post"></a>
+    <strong>post&nbsp;(self, pattern, func)</strong>
+    </dt>
+    <dd>
+    Convenience function to add a route for POST
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         stardust application</li>
+        <li><span class="parameter">pattern</span>
+         uri pattern to match</li>
+        <li><span class="parameter">func</span>
+         function</li>
+    </ul>
+
+
+
+    <h3>see also:</h3>
+    <ul>
+         <a href="../modules/stardust.router.html#route">route</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "put"></a>
+    <strong>put&nbsp;(self, pattern, func)</strong>
+    </dt>
+    <dd>
+    Convenience function to add a route for PUT
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         stardust application</li>
+        <li><span class="parameter">pattern</span>
+         uri pattern to match</li>
+        <li><span class="parameter">func</span>
+         function</li>
+    </ul>
+
+
+
+    <h3>see also:</h3>
+    <ul>
+         <a href="../modules/stardust.router.html#route">route</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "delete"></a>
+    <strong>delete&nbsp;(self, pattern, func)</strong>
+    </dt>
+    <dd>
+    Convenience function to add a route for DELETE
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         stardust application</li>
+        <li><span class="parameter">pattern</span>
+         uri pattern to match</li>
+        <li><span class="parameter">func</span>
+         function</li>
+    </ul>
+
+
+
+    <h3>see also:</h3>
+    <ul>
+         <a href="../modules/stardust.router.html#route">route</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "all"></a>
+    <strong>all&nbsp;(self, pattern, func)</strong>
+    </dt>
+    <dd>
+    Convenience function to add a route that matches all http methods
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         stardust application</li>
+        <li><span class="parameter">pattern</span>
+         uri pattern to match</li>
+        <li><span class="parameter">func</span>
+         function</li>
+    </ul>
+
+
+
+    <h3>see also:</h3>
+    <ul>
+         <a href="../modules/stardust.router.html#route">route</a>
+    </ul>
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Core_">Core </a></li>
+<li><a href="#Middleware_">Middleware </a></li>
+<li><a href="#Router_">Router </a></li>
+<li><a href="#Request_">Request </a></li>
+<li><a href="#Response_">Response </a></li>
+</ul>
+
+
+<h2>Topics</h2>
+<ul>
+  <li><strong>README.md</strong></li>
+</ul>
+<h2>Modules</h2>
+<ul>
+  <li><a href="../modules/stardust.html">stardust</a></li>
+  <li><a href="../modules/stardust.request.html">stardust.request</a></li>
+  <li><a href="../modules/stardust.response.html">stardust.response</a></li>
+  <li><a href="../modules/stardust.router.html">stardust.router</a></li>
+</ul>
+<h2>Examples</h2>
+<ul>
+  <li><a href="../examples/middleware.lua.html">middleware.lua</a></li>
+  <li><a href="../examples/redis.lua.html">redis.lua</a></li>
+  <li><a href="../examples/simple.lua.html">simple.lua</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Topic <code>README.md</code></h1>
+
+    <h1>Ziggy Stardust</h1>
+
+<p>Ziggy Stardust (or just &ldquo;stardust&rdquo;) is a simple nginx/Lua framework inspired by
+<a href="http://www.sinatrarb.com/">Sinatra</a>,
+<a href="http://expressjs.com/">Express</a>, and
+<a href="https://github.com/nrk/mercury">Mercury</a>.</p>
+
+<p>It is currently in development and is little more than a toy. It may
+eat your data and crash your computer.</p>
+
+<h2>Sample</h2>
+
+<p>The easiest way to explain stardust is to show an example.</p>
+
+<pre>
+ <span class="keyword">local</span> stardust = <span class="global">require</span> <span class="string">"stardust"</span>
+ <span class="keyword">local</span> router = <span class="global">require</span> <span class="string">"stardust.router"</span>
+
+ <span class="keyword">local</span> app = stardust.new()
+ <span class="keyword">local</span> r = router.new()
+ app:use(r)
+
+ r:get(<span class="string">"%.txt?$"</span>,
+     <span class="keyword">function</span>(req, res)
+         res.body = <span class="string">"hello, it seems you requested "</span> .. req.path
+     <span class="keyword">end</span>
+    )
+
+ <span class="keyword">function</span> _M.run(ngx)
+     <span class="keyword">return</span> app:run(ngx)
+ <span class="keyword">end</span>
+
+ <span class="keyword">return</span> _M
+</pre>
+
+
+<p>And the add something like this to your nginx virtual server config:</p>
+
+<pre>
+ location / {
+     content_by_lua <span class="string">'return require("redis").run(ngx)'</span>;
+ }
+</pre>
+
+
+<p>There are more examples in the <code>examples</code> directory.</p>
+
+<h1>Concepts Building Blocks </h1>
+
+<p>The modules are documented using
+<a href="http://stevedonovan.github.com/ldoc/">ldoc</a>. Check that for the
+&ldquo;real&rdquo; documentation.</p>
+
+<p><a name="Core"></a></p>
+
+<h2>Core </h2>
+
+<p>Lua module <a href="../modules/stardust.html#">stardust</a> </p>
+
+<p>The core of stardust doesn&rsquo;t do much. It is used to create and run and
+app. It is also used to register middleware for an app.</p>
+
+<p><a name="Middleware"></a></p>
+
+<h2>Middleware </h2>
+
+<p>Middleware is where the actual work happens. Here&rsquo;s and extremely
+simple example of creating and using middleware:</p>
+
+<pre>
+
+ <span class="keyword">local</span> app = stardust.new()
+ <span class="keyword">local</span> r = router.new()
+ app:use(r)
+
+ app:use(<span class="keyword">function</span>(req, res)
+     res.body = <span class="global">string</span>.upper(res.body)
+ <span class="keyword">end</span>
+
+ r:get(<span class="string">"%.txt?$"</span>,
+     <span class="keyword">function</span>(req, res)
+         res.body = <span class="string">"hello, it seems you requested "</span> .. req.path
+     <span class="keyword">end</span>
+    )
+</pre>
+
+
+<p> In this example, the body of the response will be converted to
+ uppercase. The middleware can live in a module or be created &ldquo;on the
+ fly&rdquo; &mdash; stardust doesn&rsquo;t care, it just needs to be a function that
+ accepts a request and a response. Middleware should generally return
+ <code>nil</code> . (Still figuring out when/how we want middleware to be able to
+ halt the request/response both for failure and success.)</p>
+
+<p> In case you didn&rsquo;t notice, the router is just middleware. Middleware
+ is ran in the order it is registered using the <code>use</code> method.</p>
+
+<p><a name="Router"></a></p>
+
+<h2>Router </h2>
+
+<p> Lua module <a href="../modules/stardust.router.html#">stardust.router</a> </p>
+
+<p> The router is fairly simple and currently uses Lua string patterns to
+ match routes. The routes are ran in order and the first match wins.</p>
+
+<p><a name="Request"></a></p>
+
+<h2>Request </h2>
+
+<p>Lua module <a href="../modules/stardust.request.html#">stardust.request</a> </p>
+
+<p>A request is generally read-only and is a thin wrapper around an HTTP
+request as used by nginx.   See the modules docs for the &ldquo;fields.&rdquo;</p>
+
+<p><a name="Response"></a></p>
+
+<h2>Response </h2>
+
+<p>Lua module <a href="../modules/stardust.response.html#">stardust.response</a> </p>
+
+<p>Basically a table that has fields:</p>
+
+<ul>
+<li>status &ndash; HTTP status code. defaults to 200</li>
+<li>headers &ndash; Lua table of HTTP response headers</li>
+<li>body &ndash; table or string of the actual response body</li>
+</ul>
+
+
+<p>All of these are read/write.</p>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
