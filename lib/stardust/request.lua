@@ -38,6 +38,7 @@ local simple_indexes = {
     cookies = "http_cookies",
     ip = "remote_addr",
     path = "uri",
+    uri = "uri",
     host = "host"
 }
 
