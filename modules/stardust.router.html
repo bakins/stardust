@@ -156,6 +156,14 @@
 
 
 
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+ <span class="keyword">local</span> r = stardust.router.new()
+ r:get(r:pattern(<span class="string">"/foo/(%d+)"</span>), <span class="keyword">function</span>(req, res) ... <span class="keyword">end</span>)
+ <span class="comment">-- captures are availible in req.params
+</span> -- <span class="keyword">in</span> above, the capture is availible <span class="keyword">in</span> r.params[<span class="number">1</span>]</pre>
+    </ul>
 
 </dd>
     <dt>
@@ -210,6 +218,17 @@
 
 
 
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+ <span class="keyword">local</span> r = stardust.router.new()
+ r:get(r:regex(<span class="string">"/foo/([0-9]+)"</span>), <span class="keyword">function</span>(req, res) ... <span class="keyword">end</span>)
+ <span class="comment">-- captures are availible in req.params
+</span> <span class="comment">-- in above, the capture is availible in r.params[1]
+</span> <span class="comment">-- you can also used named captures
+</span> r:get(r:regex(<span class="string">"/foo/(?&lt;id&gt;[0-9]+)"</span>), <span class="keyword">function</span>(req, res) ... <span class="keyword">end</span>)
+ -- capture is availible as r.params[<span class="number">1</span>] as well as r.params.id</pre>
+    </ul>
 
 </dd>
     <dt>
@@ -230,7 +249,7 @@
         <li><span class="parameter">pattern</span>
          uri pattern to match. if this is a string, it is used as a Lua string pattern. Use the results from exact, regex, pattern ,etc</li>
         <li><span class="parameter">func</span>
-         function to call when this pattern is matched. fucntion should take 2 arguments: nginx object and a response object</li>
+         function to call when this pattern is matched. function should take 2 arguments: <a href="../modules/stardust.request.html#">stardust.request</a>  and <a href="../modules/stardust.response.html#">stardust.response</a>  and return nothing on success</li>
     </ul>
 
     <h3>Returns:</h3>
