@@ -1,7 +1,5 @@
---- Ziggy
+--- create and run an application
 -- @module stardust
--- main module for the creation and running of
--- stardust applications
 
 local insert = table.insert
 local find = string.find
@@ -13,7 +11,7 @@ local response = require "stardust.response"
 local _M = {}
 
 --- Create a new stardust application.
--- @return a stardust application
+-- @treturn stardust an application
 function _M.new()
     local self = {
 	middleware = {
@@ -25,8 +23,8 @@ end
 --- Add middleware to the stack. Middleware is called in the order it is added. While it is technically possible to add middleware
 -- after the application has started (ie, calling run), this is not supported and may lead to strange results.
 -- Also add middleware before adding routes
--- @param self stardust application
--- @param func function to call
+-- @tparam stardust self stardust application
+-- @tparam function func function to call
 function _M.use(self, func)
     insert(self.middleware, func)
     return self
@@ -36,8 +34,8 @@ local response_new = response.new
 local request_new = request.new
 
 --- Run the application
--- @param self stardust application
--- @param ngx magic nginx Lua object
+-- @tparam stardust self stardust application
+-- @tparam ngx ngx magic nginx Lua object
 -- @usage Add something like this to nginx.conf:
 --content_by_lua 'return require("my.stardust.module").run(ngx)';
 function _M.run(self, ngx)
