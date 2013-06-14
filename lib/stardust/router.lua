@@ -72,6 +72,11 @@ local pattern_mt = {
 -- @param self stardust router
 -- @param pattern Lua string mattern
 -- @return an object usable with a route
+-- @usage
+-- local r = stardust.router.new()
+-- r:get(r:pattern("/foo/(%d+)"), function(req, res) ... end)
+-- -- captures are availible in req.params
+-- -- in above, the capture is availible in r.params[1]
 function _M.pattern(self, pattern)
     return setmetatable({ pattern = pattern }, pattern_mt)
 end
@@ -105,6 +110,14 @@ local regex_mt = {
 -- @param pattern regular expression
 -- @param caseless whether to do casless match. defaults for false
 -- @return an object usable with a route
+-- @usage
+-- local r = stardust.router.new()
+-- r:get(r:regex("/foo/([0-9]+)"), function(req, res) ... end)
+-- -- captures are availible in req.params
+-- -- in above, the capture is availible in r.params[1]
+-- -- you can also used named captures
+-- r:get(r:regex("/foo/(?<id>[0-9]+)"), function(req, res) ... end)
+-- -- capture is availible as r.params[1] as well as r.params.id
 function _M.regex(self, pattern, caseless)
     return setmetatable({ pattern = pattern, caseless = caseless }, regex_mt)
 end
@@ -113,7 +126,7 @@ end
 -- @tparam stardust.router self
 -- @param method HTTP method, ie GET, POST. If nil, this will apply to all methods
 -- @param pattern uri pattern to match. if this is a string, it is used as a Lua string pattern. Use the results from exact, regex, pattern ,etc
--- @param func function to call when this pattern is matched. fucntion should take 2 arguments: nginx object and a response object
+-- @param func function to call when this pattern is matched. function should take 2 arguments: `stardust.request` and `stardust.response` and return nothing on success
 -- @treturn stardust.router self
 -- @usage app = stardust.new()
 --app:route('GET', '/foo', function(ngx, res) res.body = "hello" end)
