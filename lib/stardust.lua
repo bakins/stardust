@@ -1,5 +1,7 @@
 --- Ziggy
 -- @module stardust
+-- main module for the creation and running of
+-- stardust applications
 
 local insert = table.insert
 local find = string.find
