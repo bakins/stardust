@@ -1,7 +1,6 @@
 #!/bin/sh
 set -e
 git checkout gh-pages
-git merge master -m "merging with master for doc creation"
 ldoc .
 git add .
 git status
