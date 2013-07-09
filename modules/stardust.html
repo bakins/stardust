@@ -33,6 +33,7 @@
 <h2>Contents</h2>
 <ul>
 <li><a href="#Functions">Functions</a></li>
+<li><a href="#Fields">Fields</a></li>
 </ul>
 
 
@@ -78,6 +79,17 @@
 	<tr>
 	<td class="name" nowrap><a href="#run">run&nbsp;(self, ngx)</a></td>
 	<td class="summary">Run the application</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#sender">sender&nbsp;(req, res)</a></td>
+	<td class="summary">Middleware that just calls res:send()</td>
+	</tr>
+</table>
+<h2><a href="#Fields">Fields</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#VERSION">VERSION</a></td>
+	<td class="summary">version</td>
 	</tr>
 </table>
 
@@ -155,6 +167,50 @@
         <pre class="example">Add something like this to nginx.conf:
 content_by_lua <span class="string">'return require("my.stardust.module").run(ngx)'</span>;</pre>
     </ul>
+
+</dd>
+    <dt>
+    <a name = "sender"></a>
+    <strong>sender&nbsp;(req, res)</strong>
+    </dt>
+    <dd>
+    Middleware that just calls res:send()
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">req</span>
+            <span class="types"><a class="type" href="../modules/stardust.request.html#">stardust.request</a></span>
+
+</li>
+        <li><span class="parameter">res</span>
+            <span class="types"><a class="type" href="../modules/stardust.response.html#">stardust.response</a></span>
+
+</li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">app:use(stardust.sender)</pre>
+    </ul>
+
+</dd>
+</dl>
+    <h2><a name="Fields"></a>Fields</h2>
+    <dl class="function">
+    <dt>
+    <a name = "VERSION"></a>
+    <strong>VERSION</strong>
+    </dt>
+    <dd>
+    version
+
+
+
+
+
 
 </dd>
 </dl>

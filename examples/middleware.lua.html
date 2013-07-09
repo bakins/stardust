@@ -73,8 +73,7 @@
 <span class="keyword">local</span> r = router.new()
 app:use(r)
 app:use(middleware)
-<span class="comment">-- TODO: wrap this in a reusable middleware
-</span>app:use(<span class="keyword">function</span>(req, res) <span class="keyword">return</span> res:send() <span class="keyword">end</span>)
+app:use(stardust.sender)
 
 r:get(<span class="string">"/"</span>,
       <span class="keyword">function</span>(req, res)
