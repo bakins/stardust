@@ -26,8 +26,7 @@ local app = stardust.new()
 local r = router.new()
 app:use(r)
 
--- TODO: wrap this in a reusable middleware
-app:use(function(req, res) return res:send() end)
+app:use(stardust.sender)
 
 r:get("%.html?$",
       function(req, res)
