@@ -10,6 +10,9 @@ local response = require "stardust.response"
 
 local _M = {}
 
+--- version
+_M.VERSION = "0.2.0"
+
 --- Create a new stardust application.
 -- @treturn stardust an application
 function _M.new()
@@ -51,6 +54,14 @@ function _M.run(self, ngx)
 	    return ngx.exit(500)
 	end
     end
+end
+
+--- Middleware that just calls res:send()
+-- @tparam stardust.request req
+-- @tparam stardust.response res
+-- @usage app:use(stardust.sender)
+function _M.sender(req, res)
+    return res:send()
 end
 
 return _M
