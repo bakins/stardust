@@ -1,6 +1,7 @@
-%w[ build-essential libpcre3-dev git-core cpanminus libssl-dev ].each do |p|
+%w[ build-essential libpcre3-dev git-core cpanminus libssl-dev redis-server ].each do |p|
   package p
 end
+
 execute "cpanm install Test::Nginx" do
   not_if "perl -mTest::Nginx -e'1'"
 end
